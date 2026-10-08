@@ -10,8 +10,7 @@
 </p>
 
 <p align="center">
-  <b>The TypeScript SDK for relayfor.si.</b> Launch pump.fun tokens whose creator fees become<br>
-  AI credit, and spend it on hundreds of models through the RFS Router.
+  <b>The TypeScript SDK for relayfor.si.</b> Launch pump.fun tokens whose creator fees become AI credit, and spend it on hundreds of models.
 </p>
 
 <p align="center">
@@ -21,106 +20,110 @@
   <a href="https://github.com/relayforsi/relayforsi-sdk/issues">Issues</a>
 </p>
 
-<br>
-
 ## Install
 
 ```bash
 npm i relayfor.si
 ```
 
-Node.js 22+, Bun, Deno, Cloudflare Workers and Vercel Functions. ESM, with `require()` on
-Node.js 22.12+.
+Runs on Node.js 22+, Bun, Deno, Cloudflare Workers and Vercel Functions.
 
 ## Quick start
 
 ```ts
 import { RelayForSI } from "relayfor.si";
 
-const relayForSI = new RelayForSI(); // reads RELAYFOR_SECRET_KEY
+// Reads RELAYFOR_SECRET_KEY (rf_sk_...).
+const relayForSI = new RelayForSI();
 
-// 1. Server: prepare the launch.
-const launch = await relayForSI.launches.prepare(
-  {
-    creator: wallet, // signs last and pays
-    name: "Acme",
-    symbol: "ACME",
-    image: await relayForSI.files.dataUri(file),
-  },
-  { idempotencyKey: `launch:${draftId}` },
-);
+// Server: prepare the launch.
+const launch = await relayForSI.launches.prepare({
+  creator: wallet,
+  name: "Acme",
+  symbol: "ACME",
+  image: await relayForSI.files.dataUri(file),
+});
 
-// 2. Browser: the creator's wallet signs it (relayfor.si/solana).
-// 3. Server: submit it and wait for the chain.
+// Browser: the creator's wallet signs launch.transaction.
+
+// Server: submit it and wait for the chain.
 await relayForSI.launches.submit(launch.id, { transaction: signed });
-const done = await relayForSI.launches.wait(launch.id); // "confirmed", "failed" or "expired"
+const { state } = await relayForSI.launches.wait(launch.id);
 ```
 
-## What's inside
+## Packages
 
-| Import                                                                   | Use it to                                                                                                                     |
-| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| `relayfor.si`                                                            | Launch and import tokens, set fee strategies, and manage AI credit, router keys, usage, statements and webhooks. Server only. |
-| `relayfor.si/solana`                                                     | Sign launch, import and purchase transactions with any Wallet Standard wallet. Browser, no dependencies.                      |
-| `relayfor.si/webhooks`                                                   | Verify webhook signatures and get typed events.                                                                               |
-| [`@relayforsi/ai-sdk`](https://www.npmjs.com/package/@relayforsi/ai-sdk) | The RFS Router as a Vercel AI SDK provider, for text and images.                                                              |
+- **`relayfor.si`**: the API client for launches, imports, fee
+  strategies, AI credit, router keys, usage, statements and webhooks.
+  Server only.
+- **`relayfor.si/solana`**: signs launch, import and purchase
+  transactions with any Wallet Standard wallet, in the browser.
+- **`relayfor.si/webhooks`**: verifies webhook signatures and types the
+  events.
+- **[`@relayforsi/ai-sdk`](https://www.npmjs.com/package/@relayforsi/ai-sdk)**:
+  the RFS Router as a Vercel AI SDK provider.
 
-Resources: `project`, `launches`, `tokens`, `presets`, `accounts` (with `ledger` and
-`purchases`), `keys`, `usage`, `statements`, `webhooks` (with `deliveries`), `files` and `ai`.
-Fields keep the API's names; amounts and dates are strings.
+## Usage
 
-`list()` returns a page, `all()` walks every page:
+### Lists
 
 ```ts
-for await (const token of relayForSI.tokens.all()) console.log(token.mint);
+for await (const token of relayForSI.tokens.all()) {
+  console.log(token.mint);
+}
 ```
 
-## AI
+`list()` returns one page; `all()` walks every page.
+
+### Wallet signing
 
 ```ts
-import OpenAI from "openai";
+import {
+  pickTransactionVersion,
+  signWithWallet,
+} from "relayfor.si/solana";
 
-// Any OpenAI- or Anthropic-compatible client, with a router key (rf_ai_...).
-const openai = new OpenAI({ baseURL: relayForSI.ai.baseURL, apiKey: routerKey });
-
-const { spendable_usd } = await relayForSI.ai.balance(); // reads RELAYFOR_ROUTER_KEY
-const { data } = await relayForSI.ai.images.generate({
-  model: "openai/gpt-image-2",
-  prompt: "A red lighthouse at dusk, flat illustration",
-}); // data[0].b64_json
+// Pass it to prepare() as transaction_version.
+const version = pickTransactionVersion(wallet);
+const signed = await signWithWallet(
+  wallet,
+  account,
+  launch.transaction,
+);
 ```
 
-`ai.models()` and `ai.imageModels()` list every model with its price. `ai.images.stream()`
-yields partial images as they form.
-
-## Wallet signing
-
-```ts
-import { pickTransactionVersion, signWithWallet } from "relayfor.si/solana";
-
-const version = pickTransactionVersion(wallet); // pass as transaction_version
-const signed = await signWithWallet(wallet, account, launch.transaction);
-```
-
-## Webhooks
+### Webhooks
 
 ```ts
 import { verifyWebhook } from "relayfor.si/webhooks";
 
 const event = await verifyWebhook({
-  body: await request.text(), // the raw body
+  body: await request.text(),
   header: request.headers.get("relayfor-signature"),
-  secret: process.env.RELAYFOR_WEBHOOK_SECRET!, // or [current, previous] while rotating
+  secret: process.env.RELAYFOR_WEBHOOK_SECRET!,
 });
-
-if (event.type === "launch.confirmed") console.log(event.data.launch.mint);
 ```
 
-Deliveries arrive at least once: deduplicate on `event.id` and answer 2xx within 10 seconds.
+Pass the raw body. Deliveries arrive at least once: deduplicate on
+`event.id`.
 
-## Errors
+### AI
 
-Every error extends `RelayForSIError` and has a stable `code`:
+```ts
+// Reads RELAYFOR_ROUTER_KEY (rf_ai_...).
+const { spendable_usd } = await relayForSI.ai.balance();
+
+const { data } = await relayForSI.ai.images.generate({
+  model: "openai/gpt-image-2",
+  prompt: "A red lighthouse at dusk",
+});
+```
+
+For chat, point the OpenAI or Anthropic SDK at `relayForSI.ai.baseURL`
+with a router key, or use
+[`@relayforsi/ai-sdk`](https://www.npmjs.com/package/@relayforsi/ai-sdk).
+
+## Errors and retries
 
 ```ts
 import { isAPIError } from "relayfor.si";
@@ -130,42 +133,29 @@ try {
 } catch (error) {
   if (isAPIError(error) && error.code === "insufficient_funds") {
     // error.status, error.param, error.requestId
-  } else throw error;
+  }
 }
 ```
 
-`APIError` is an answer from the API, `ConnectionError` none at all, `TimeoutError` too late.
-Codes autocomplete; new ones arrive in minor versions, so keep a default branch.
-
-## Retries
-
-Network errors, timeouts, 408, 429 and 5xx answers are retried twice with backoff, honoring
-`retry-after` (a deliberate `*_closed` refusal is not).
-Every POST carries an `Idempotency-Key`, so a retry never acts twice. If your own job may run
-again, pass a stable key: `{ idempotencyKey: "launch:42" }`. Image generation is charged and
-retried only after refusals that cost nothing.
+- Every error has a stable `code`; new codes may come in minor versions.
+- Network errors, timeouts, 429 and 5xx are retried twice.
+- Every POST carries an idempotency key, so a retry never acts twice.
+  Pass your own for jobs that may rerun:
+  `{ idempotencyKey: "launch:42" }`.
 
 ## Configuration
 
 ```ts
-new RelayForSI({
-  apiKey, // RELAYFOR_SECRET_KEY (rf_sk_...)
-  routerKey, // RELAYFOR_ROUTER_KEY (rf_ai_...)
-  baseURL, // https://relayfor.si
-  timeout, // 30000 ms per attempt
-  maxRetries, // 2
+const relayForSI = new RelayForSI({
+  apiKey: "rf_sk_...",
+  routerKey: "rf_ai_...",
+  timeout: 30_000,
+  maxRetries: 2,
 });
 ```
 
-Also `fetch`, `fetchOptions`, `headers`, `hooks` (`onRequest`, `onResponse`, `onRetry`) and
-`appInfo`. Every method takes `signal`, `timeout`, `maxRetries`, `idempotencyKey` and `headers`
-as its last argument. Keys never appear in logs, errors or hooks, and the client refuses to run
-in a browser.
-
-## Requirements
-
-- TypeScript 5.4+ with `moduleResolution` `bundler`, `node16` or `nodenext`.
-- Jest in CommonJS mode cannot load ESM packages: use Vitest or Jest's ESM mode.
+Every method also takes `signal`, `timeout`, `maxRetries` and
+`idempotencyKey` as its last argument.
 
 ## License
 

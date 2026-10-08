@@ -1,3 +1,9 @@
 {
-  "printWidth": 100
+  "printWidth": 100,
+  "overrides": [
+    {
+      "files": "packages/*/README.md",
+      "options": { "printWidth": 72 }
+    }
+  ]
 }

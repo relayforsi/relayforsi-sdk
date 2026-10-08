@@ -11,7 +11,8 @@ npm i @relayforsi/ai-sdk ai
 
 ```ts
 import { generateText } from "ai";
-import { relayForSI } from "@relayforsi/ai-sdk"; // reads RELAYFOR_ROUTER_KEY
+// Reads RELAYFOR_ROUTER_KEY (rf_ai_...).
+import { relayForSI } from "@relayforsi/ai-sdk";
 
 const { text, providerMetadata } = await generateText({
   model: relayForSI("anthropic/claude-sonnet-5.5"),
@@ -19,7 +20,8 @@ const { text, providerMetadata } = await generateText({
   maxOutputTokens: 512,
 });
 
-console.log(providerMetadata?.relayforsi?.cost); // USD charged for the call
+// USD charged for the call.
+console.log(providerMetadata?.relayforsi?.cost);
 ```
 
 Use `createRelayForSI({ apiKey, baseURL, headers, fetch })` for a provider with custom settings.
@@ -49,7 +51,8 @@ const { image, calls } = await generateImage({
   providerOptions: { relayforsi: { quality: "medium" } },
 });
 
-console.log(calls[0]?.providerMetadata?.relayforsi?.cost); // USD charged for that call
+// USD charged for that call.
+console.log(calls[0]?.providerMetadata?.relayforsi?.cost);
 ```
 
 - Image models, the fields each takes and their prices: `GET https://relayfor.si/api/v1/images/models`.
