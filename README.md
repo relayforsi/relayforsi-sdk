@@ -40,10 +40,9 @@ Other checks:
 
 ## Releases
 
-Releases are created by release-please from conventional commits and published from CI with npm
-provenance. The first release is pinned to 0.1.0 with `release-as` in
-`release-please-config.json`: remove both `release-as` entries once 0.1.0 is out, or every later
-release stays 0.1.0.
+Releases are created by release-please from conventional commits: merging its release PR tags
+the release, and the `npm` environment (the owner's approval) publishes it from GitHub Actions
+through npm trusted publishing, with provenance and no stored token.
 
 ## License
 

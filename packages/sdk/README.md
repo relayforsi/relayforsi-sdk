@@ -6,7 +6,7 @@
   <a href="https://www.npmjs.com/package/relayfor.si"><img src="https://img.shields.io/npm/v/relayfor.si?color=05e587&labelColor=070707" alt="npm version"></a>
   <a href="https://github.com/relayforsi/relayforsi-sdk/actions/workflows/ci.yml"><img src="https://github.com/relayforsi/relayforsi-sdk/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/node/v/relayfor.si?color=05e587&labelColor=070707" alt="Node.js version">
-  <a href="https://github.com/relayforsi/relayforsi-sdk/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/relayfor.si?color=05e587&labelColor=070707" alt="MIT license"></a>
+  <a href="https://github.com/relayforsi/relayforsi-sdk/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/relayfor.si?color=05e587&labelColor=070707" alt="MIT license"></a>
 </p>
 
 <p align="center">
@@ -169,4 +169,4 @@ in a browser.
 
 ## License
 
-[MIT](https://github.com/relayforsi/relayforsi-sdk/blob/main/LICENSE)
+[MIT](https://github.com/relayforsi/relayforsi-sdk/blob/master/LICENSE)
