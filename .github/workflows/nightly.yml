@@ -25,8 +25,10 @@ jobs:
       - run: pnpm generate:check
       - run: pnpm typecheck && pnpm test
 
-  # Runs the SDK against the live API.
+  # Runs the SDK against the live API. Set the repository variable RELAYFOR_LIVE_SMOKE to "true"
+  # once the nightly environment holds RELAYFOR_CI_SECRET_KEY.
   live:
+    if: vars.RELAYFOR_LIVE_SMOKE == 'true'
     runs-on: ubuntu-latest
     environment: nightly
     steps:
