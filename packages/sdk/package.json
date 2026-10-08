@@ -1,6 +1,6 @@
 {
   "name": "relayfor.si",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "TypeScript SDK for the relayfor.si API.",
   "license": "MIT",
   "type": "module",
