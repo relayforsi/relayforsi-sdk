@@ -1,6 +1,16 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/relayforsi/relayforsi-sdk/8517101fa9a5de2268742676f13fa746c9a298a3/assets/banner.png" alt="relayfor.si: the fees-to-AI layer for launchpads" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://docs.relayfor.si">Docs</a> ·
+  <a href="https://docs.relayfor.si/api">API reference</a> ·
+  <a href="https://relayfor.si">relayfor.si</a>
+</p>
+
 # relayforsi-sdk
 
-SDKs for [relayfor.si](https://relayfor.si).
+TypeScript SDKs for [relayfor.si](https://relayfor.si).
 
 | Package                                 | Description                                         |
 | --------------------------------------- | --------------------------------------------------- |
