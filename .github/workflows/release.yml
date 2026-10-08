@@ -1,11 +1,13 @@
 name: release
 
 # release-please opens a release PR from conventional commits. Merging it creates the release,
-# and publishing runs in the protected `npm` environment using npm trusted publishing.
+# and publishing runs in the protected `npm` environment using npm trusted publishing. Running the
+# workflow by hand publishes any package version on master that npm does not have yet.
 
 on:
   push:
     branches: [master]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -28,7 +30,7 @@ jobs:
 
   publish:
     needs: release-please
-    if: needs.release-please.outputs.releases_created == 'true'
+    if: needs.release-please.outputs.releases_created == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: npm
     permissions:
@@ -50,13 +52,16 @@ jobs:
       # Trusted publishing (OIDC, with provenance) needs npm 11.5.1 or later.
       - run: npm install -g npm@^11.5.1
       - run: pnpm check
-      - name: Publish the released packages
-        env:
-          PATHS: ${{ needs.release-please.outputs.paths_released }}
+      - name: Publish each package version npm does not have yet
         run: |
-          for path in $(echo "$PATHS" | jq -r '.[]'); do
-            version=$(node -p "require('./$path/package.json').version")
+          for dir in packages/sdk packages/ai-sdk; do
+            name=$(node -p "require('./$dir/package.json').name")
+            version=$(node -p "require('./$dir/package.json').version")
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "$name@$version is already on npm"
+              continue
+            fi
             # Prereleases are published under the `next` tag.
             tag=$([[ "$version" == *-* ]] && echo next || echo latest)
-            (cd "$path" && npm publish --access public --tag "$tag")
+            (cd "$dir" && npm publish --access public --tag "$tag")
           done
