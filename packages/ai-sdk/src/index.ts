@@ -29,7 +29,7 @@ import {
 import { z } from "zod/v4";
 
 /** Package version, sent in the `x-relayforsi-sdk` header. */
-export const VERSION: string = "0.1.0"; // x-release-please-version
+export const VERSION: string = "0.2.0"; // x-release-please-version
 
 export const DEFAULT_BASE_URL: string = "https://relayfor.si/api/v1";
 
