@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "node",
+  "include-component-in-tag": true,
+  "bump-minor-pre-major": true,
+  "packages": {
+    "packages/sdk": {
+      "component": "relayfor.si",
+      "release-as": "0.1.0",
+      "extra-files": ["src/core/version.ts"]
+    },
+    "packages/ai-sdk": {
+      "component": "ai-sdk",
+      "release-as": "0.1.0",
+      "extra-files": ["src/index.ts"]
+    }
+  }
+}

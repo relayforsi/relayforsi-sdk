@@ -1,0 +1,15 @@
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    include: ["test/**/*.test.ts"],
+    setupFiles: ["test/setup.ts"],
+    restoreMocks: true,
+    unstubEnvs: true,
+    unstubGlobals: true,
+    typecheck: {
+      include: ["test/**/*.test-d.ts"],
+      tsconfig: "test/tsconfig.json",
+    },
+  },
+});

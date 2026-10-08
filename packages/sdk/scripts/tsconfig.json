@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  // Node scripts, run with type stripping.
+  "compilerOptions": {
+    "lib": ["es2023", "dom"],
+    "types": ["node"],
+    "isolatedDeclarations": false,
+    "declaration": false,
+    // Typechecked against the source, so it needs no build; Node runs it against dist through
+    // the package's own exports.
+    "paths": { "relayfor.si": ["../src/index.ts"] }
+  },
+  "include": ["."]
+}

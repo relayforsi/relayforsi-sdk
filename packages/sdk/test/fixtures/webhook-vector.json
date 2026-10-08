@@ -1,0 +1,8 @@
+{
+  "secret": "whsec_kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+  "previous": "whsec_ooooooooooooooooooooooooooooooooooooooooooo",
+  "body": "{\"id\":\"evt_0123456789abcdef\",\"type\":\"ping\",\"created_at\":\"2026-10-05T12:00:00.000Z\",\"project\":\"prj_0123456789abcdef\",\"data\":{\"message\":\"Hello from relayfor.si.\"}}",
+  "timestamp": 1791201600,
+  "header": "t=1791201600,v1=4f3615d23a3f9a5ba662eebda180578befb1e5e39e5808c73b7bbf238b9fcca8",
+  "rotated": "t=1791201600,v1=4f3615d23a3f9a5ba662eebda180578befb1e5e39e5808c73b7bbf238b9fcca8,v1=dddb20bddfc90ef859f788b8d93c6f34aef6d91fd2167f983caae764a0a38024"
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "minimumReleaseAge": "1 day",
+  "schedule": ["before 6am on monday"],
+  "packageRules": [
+    {
+      "description": "Development dependencies, grouped weekly.",
+      "matchDepTypes": ["devDependencies"],
+      "rangeStrategy": "bump",
+      "groupName": "dev tools"
+    },
+    {
+      "description": "Runtime and peer dependencies: widen ranges instead of replacing them.",
+      "matchDepTypes": ["dependencies", "peerDependencies"],
+      "rangeStrategy": "widen"
+    },
+    {
+      "description": "openapi-typescript requires TypeScript 5.",
+      "matchFileNames": ["tools/codegen/package.json"],
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<6"
+    }
+  ]
+}

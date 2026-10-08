@@ -1,0 +1,26 @@
+[
+  {
+    "name": "relayfor.si: import { RelayForSI }",
+    "path": "dist/index.js",
+    "import": "{ RelayForSI }",
+    "limit": "7.6 KB"
+  },
+  {
+    "name": "relayfor.si: the whole root entry",
+    "path": "dist/index.js",
+    "import": "*",
+    "limit": "7.9 KB"
+  },
+  {
+    "name": "relayfor.si/webhooks: import { verifyWebhook }",
+    "path": "dist/webhooks.js",
+    "import": "{ verifyWebhook }",
+    "limit": "1.4 KB"
+  },
+  {
+    "name": "relayfor.si/solana: import { signWithWallet }",
+    "path": "dist/solana.js",
+    "import": "{ signWithWallet }",
+    "limit": "1.4 KB"
+  }
+]

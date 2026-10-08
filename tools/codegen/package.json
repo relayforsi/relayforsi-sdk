@@ -1,0 +1,14 @@
+{
+  "name": "@relayforsi-internal/codegen",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generates SDK types from the relayfor.si OpenAPI document.",
+  "scripts": {
+    "generate": "node generate.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "typescript": "~5.9.3"
+  }
+}

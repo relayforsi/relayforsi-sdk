@@ -1,0 +1,9 @@
+[
+  {
+    "name": "@relayforsi/ai-sdk: its own code (AI SDK packages excluded)",
+    "path": "dist/index.js",
+    "import": "{ createRelayForSI }",
+    "ignore": ["@ai-sdk/openai-compatible", "@ai-sdk/provider", "@ai-sdk/provider-utils"],
+    "limit": "2 KB"
+  }
+]

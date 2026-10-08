@@ -1,0 +1,30 @@
+{
+  "name": "relayforsi-sdk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=22.18",
+    "pnpm": ">=11"
+  },
+  "scripts": {
+    "generate": "pnpm --filter @relayforsi-internal/codegen run generate",
+    "generate:check": "pnpm --filter @relayforsi-internal/codegen run generate --check",
+    "spec:accept": "pnpm --filter @relayforsi-internal/codegen run generate --accept",
+    "typecheck": "pnpm -r --filter './packages/*' run typecheck",
+    "lint": "oxlint --type-aware --deny-warnings packages tools scripts",
+    "test": "pnpm -r --filter './packages/*' run test",
+    "build": "pnpm -r --filter './packages/*' run build",
+    "check:package": "pnpm -r --filter './packages/*' run check:package",
+    "public-names": "node scripts/public-names.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "pnpm generate:check && pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm check:package && node scripts/pack-files.mjs && node scripts/public-names.mjs && pnpm format:check"
+  },
+  "devDependencies": {
+    "oxlint": "^1.86.0",
+    "oxlint-tsgolint": "^7.0.2003",
+    "prettier": "^3.9.9"
+  }
+}
